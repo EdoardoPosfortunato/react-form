@@ -4,24 +4,44 @@ import mangas from './data/manga.js'
 
 function App() {
 
-  const [mangaName, setMangaName] = useState("")
+  const [mangaTitle, setmangaTitle] = useState("")
+  const [mangaAuthor, setMangaAuthor] = useState("")
+  const [mangaPlot, setMangaPlot] = useState("")
   const [mangaList, setMangaList] = useState(mangas)
+  const [show, setShow] = useState(false)
 
 
-  const newMangaName = (event) => {
-    setMangaName(event.target.value)
-    console.log(mangaName) // perchè logga quello prima !!!!!!!!
-  } // questa è la funzione che modifica il mangaValue 
+  const updateTitle = (event) => {
+    setmangaTitle(event.target.value)
+  } // questa è la funzione che modifica il mangaTitle
+
+  const updateAuthor = (event) => {
+    setMangaAuthor(event.target.value)
+  } // questa è la funzione che modifica il mangaTitle
+
+  const updatePlot = (event) => {
+    setMangaPlot(event.target.value)
+  } // questa è la funzione che modifica il mangaTitle
 
   const addNewManga = (event) => {
     event.preventDefault()
+    if(mangaAuthor !== "" && mangaTitle !== "" && mangaPlot !== "" ) {
     let newManga = {
       id: mangaList.length + 1,
-      title: mangaName
+      title: mangaTitle,
+      author: mangaAuthor,
+      plot: mangaPlot
     }
     setMangaList([...mangaList, newManga])
     console.log(mangaList)
-    setMangaName("")
+    setmangaTitle("")
+    setMangaAuthor('')
+    setMangaPlot('')
+    setShow(false)
+  } else {
+    setShow(true)
+  }
+
   }
 
   return (
@@ -35,8 +55,28 @@ function App() {
           <div className='input-group mb-3'>
             <span className="input-group-text" id="inputGroup-sizing-default">Titolo</span>
             <input
-              value={mangaName} //imposta come valore inziale la stringa vuota
-              onChange={newMangaName} //fa si che tutte le volte abbiamo un cambiamento si attivi la funzione
+              value={mangaTitle} //imposta come valore inziale la stringa vuota
+              onChange={updateTitle} //fa si che tutte le volte abbiamo un cambiamento si attivi la funzione
+              className='form-control'
+              aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
+              type="text"
+            />
+          </div>
+          <div className='input-group mb-3'>
+            <span className="input-group-text" id="inputGroup-sizing-default">Autore</span>
+            <input
+              value={mangaAuthor} //imposta come valore inziale la stringa vuota
+              onChange={updateAuthor} //fa si che tutte le volte abbiamo un cambiamento si attivi la funzione
+              className='form-control'
+              aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
+              type="text"
+            />
+          </div>
+          <div className='input-group mb-3'>
+            <span className="input-group-text" id="inputGroup-sizing-default">Trama in 5 parole</span>
+            <input
+              value={mangaPlot} //imposta come valore inziale la stringa vuota
+              onChange={updatePlot} //fa si che tutte le volte abbiamo un cambiamento si attivi la funzione
               className='form-control'
               aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default"
               type="text"
@@ -44,6 +84,8 @@ function App() {
           </div>
           <button className='btn btn-primary col-3'>aggiungi</button>
         </form>
+        {show && <p className='alert alert-warning'>Manca qualche informazione</p>}
+        {/* ------------------------------------------------------------- */}
         <ul className='list-group'>
           {mangaList.map((currManga, index) =>
             <li
